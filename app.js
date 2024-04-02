@@ -1,27 +1,39 @@
 const prompt = require('prompt-sync')();
-const username = prompt('What is your name? ');
-console.log(`Your name is ${username}`);
-console.clear();
+
+// Constants
+const NUM_DAYS = 30;
+const DAILY_EARNINGS = 100;
+const END_GOAL = 20000;
 
 // Game data
-let totalMoneyEarned = 0; // Initial money earned
-let dailyEarnings = 100; // What you earn annually
-let endGoal = 20000; // The end goal - 1 truck
-let upgradedShovelCrewCost = 500; // Cost of upgraded shovel crew
-let snowRemoverCost = 2000; // Cost of snow remover
-let flamethrowerCost = 5000; // Cost of flamethrower
-let upgradeMultiplier = 1.5; // Multiplier for increasing earnings with each upgrade
-let upgradeLevel = 0; // Upgrade level
+let totalMoneyEarned = 0;
+let upgradeLevel = 0;
 
 // Introduction and Challenge prompt
-console.log(`Welcome to Snow Removal 2000, ${username}`);
-console.log(`You are starting but you currently only have a shovel. Your goal is to get a truck but it costs $20,000.`);
+console.log(`Welcome to Snow Removal 2000!`);
 
-const promptResponse = prompt(`Do you accept this challenge? `).toLowerCase();
-if (promptResponse === `yes`) {
-    console.log(`Great! We will see you tomorrow!`);
-} else if (promptResponse === 'no') {
+const promptResponse = prompt(`What is your name? `);
+const username = promptResponse.trim();
+
+console.log(`Your name is ${username}`);
+console.log(`You are starting but you currently only have a shovel. Your goal is to get a truck but it costs $${END_GOAL}.`);
+
+const acceptChallenge = prompt(`Do you accept this challenge? (yes/no) `).toLowerCase();
+if (acceptChallenge !== 'yes') {
     console.log(`Have a nice day then.`);
-    process.exit(); // Move process.exit() here
+    process.exit(); // Exit the program if the user declines the challenge
 }
 
+// Functions
+function earnMoney(baseEarnings, upgradeLevel) {
+    return baseEarnings * (upgradeLevel + 1); // Increasing earnings with each upgrade
+}
+
+// Gameplay Loop
+for (let day = 1; day <= NUM_DAYS; day++) {
+    console.log(`Day ${day}`);
+    const earnings = earnMoney(DAILY_EARNINGS, upgradeLevel);
+    totalMoneyEarned += earnings;
+    console.log(`You earned $${earnings} today. Total earnings: $${totalMoneyEarned}`);
+    // Display other game information and implement upgrade logic here
+}
