@@ -3,8 +3,18 @@ const prompt = require('prompt-sync')();
 // Constants
 const NUM_DAYS = 30;
 const MIN_DAILY_EARNINGS = 100;
-const MAX_DAILY_EARNINGS = 200;
+const MAX_DAILY_EARNINGS = 500;
 const END_GOAL = 20000;
+const UPGRADE_COSTS = {
+    'A': 500,
+    'B': 1000,
+    'C': 2000
+};
+const UPGRADE_MULTIPLIERS = {
+    'A': 2.5,
+    'B': 4.0,
+    'C': 6.5
+};
 
 // Introduction and Challenge prompt
 console.log(`Welcome to Snow Removal 2000!`);
@@ -48,8 +58,8 @@ function handleMission(day) {
             return 0; // Return $0 if user chooses not to work
         case 'C':
             console.log("You chose to upgrade equipment.");
-            // Implement upgrade equipment logic
-            return 0; // For now, return $0
+            handleUpgrade();
+            return 0; // Return $0 since no earnings today due to upgrade choice
         case 'D':
             console.log("You chose to end the game. Goodbye!");
             process.exit(); // Quit out of the game
@@ -58,6 +68,29 @@ function handleMission(day) {
             console.log("Invalid choice. Please select A, B, C, or D.");
             return handleMission(day); // Prompt again for valid choice and return the result
     }
+}
+
+// Function to handle upgrade
+function handleUpgrade() {
+    console.log("What upgrade would you like?");
+    console.log("A. Snow Removal Crew - $500");
+    console.log("B. Snow Remover + Crew - $1000");
+    console.log("C. Flamethrower - $2000");
+    const upgradeChoice = prompt("Enter your choice (A/B/C): ").toUpperCase();
+    console.clear(); // Clear the console
+    const upgradeCost = UPGRADE_COSTS[upgradeChoice];
+    if (upgradeCost === undefined) {
+        console.log("Invalid upgrade choice.");
+        return;
+    }
+    if (currentMoney < upgradeCost) {
+        console.log("You don't have enough money to purchase this upgrade.");
+        return;
+    }
+    currentMoney -= upgradeCost; // Subtract upgrade cost from current money
+    const upgradeMultiplier = UPGRADE_MULTIPLIERS[upgradeChoice];
+    console.log(`Congrats, you purchased the upgrade! Your business should be better from here on!`);
+    console.log(); // Add an empty line for better readability
 }
 
 // Initialize current money
